@@ -26,8 +26,8 @@ public:
 	void insertEdge(int startVertex, int endVertex, int weight);
 	void removeEdge(int startVertex, int endVertex, int weight);
 	void findShortestPath();
-	void displayAll();
-	void display(int fromNode, int toNode);
+	void displayAll() const;
+	void display(int fromNode, int toNode) const;
 
 	~GraphM();
 };
