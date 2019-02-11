@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 #include "nodedata.h"
 
 const int MAXNODES = 100; //per assignment instructions
@@ -18,13 +19,14 @@ private:
 	int C[MAXNODES][MAXNODES];
 	int size;
 	TableType T[MAXNODES][MAXNODES];
+	int findNearestNeighbor(int sourceNode) const;
 
 public:
 	GraphM();
 	
 	void buildGraph(ifstream& infile);
 	void insertEdge(int startVertex, int endVertex, int weight);
-	void removeEdge(int startVertex, int endVertex, int weight);
+	void removeEdge(int startVertex, int endVertex);
 	void findShortestPath();
 	void displayAll() const;
 	void display(int fromNode, int toNode) const;
