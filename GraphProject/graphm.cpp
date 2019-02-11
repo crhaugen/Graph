@@ -1,5 +1,8 @@
 #include"graphm.h"
+#include <iomanip> 
+#include <iostream>
 
+using namespace std;
 
 GraphM::GraphM()
 {
@@ -66,12 +69,31 @@ void GraphM::findShortestPath()
 
 }
 
-void GraphM::displayAll()
+void GraphM::displayAll() const
 {
+	cout << "Description" << setw(25) 
+		<< "From node  To node  Dijkstra's Path " << endl;
 
+	for (int currentVertex = 1; currentVertex < size; currentVertex++)
+	{
+		cout << data[currentVertex] << setw(25);
+
+		for (int neighbor = 1; neighbor < size; neighbor++)
+		{
+			if (currentVertex == neighbor) //no need to print info about itself
+			{
+				break;
+			}
+
+			cout << currentVertex << setw(10) << neighbor 
+				<< T[currentVertex][neighbor].dist;
+
+			//somehow get shortest path..
+		}
+	}
 }
 
-void GraphM::display(int fromNode, int toNode)
+void GraphM::display(int startNode, int endNode) const
 {
 
 }
