@@ -20,6 +20,10 @@ private:
 	int size;
 	TableType T[MAXNODES][MAXNODES];
 	int findNearestNeighbor(int sourceNode) const;
+	void setAllVistedFalse();
+
+	string shortestPaths[MAXNODES][MAXNODES];
+	void getShortestPaths();
 
 public:
 	GraphM();
