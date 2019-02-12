@@ -84,6 +84,33 @@ int GraphM::findNearestNeighbor(int sourceNode) const
 	return indexOfSmallest;
 }
 
+void GraphM::getShortestPaths()
+{
+	string path = "";
+	for (int from = 1; from <= size; from++)
+	{
+		for (int to = 1; to <= size; to++)
+		{
+			if (from != to)
+			{
+				int nextVertex = to;
+
+				while (nextVertex != 0)
+				{
+					path += to_string(nextVertex) + " ";
+					nextVertex = T[from][nextVertex].path;
+				}
+
+				reverse(path.begin(), path.end());
+				shortestPaths[from][to] = path;
+				path = "";
+			}
+
+			
+		}
+	}
+}
+
 void GraphM::findShortestPath()
 {
 	for (int source = 1; source <= size; source++)
@@ -108,15 +135,26 @@ void GraphM::findShortestPath()
 					if (T[source][i].dist > T[source][nearestNeighbor].dist +
 						C[nearestNeighbor][i])
 					{
-						T[source][i].path = nearestNeighbor;
-						shortestPaths[i] += to_string(nearestNeighbor);
-						shortestPaths[i] += " ";
-
 						T[source][i].dist = 
 							T[source][nearestNeighbor].dist + C[nearestNeighbor][i];
+						
+						T[source][i].path = nearestNeighbor;
 					}
 				}
 			}
+		}
+		setAllVistedFalse();
+	}
+	getShortestPaths();
+}
+
+void GraphM::setAllVistedFalse()
+{
+	for (int i = 1; i < MAXNODES; i++)
+	{
+		for (int j = 1; j < MAXNODES; j++)
+		{
+			T[i][j].visted = false;
 		}
 	}
 }
@@ -142,7 +180,7 @@ void GraphM::displayAll() const
 				{
 					cout << T[currentVertex][neighbor].dist << " ";
 
-					cout << shortestPaths[neighbor];
+					cout << shortestPaths[currentVertex][neighbor];
 					//somehow get shortest path..
 				}
 				else
