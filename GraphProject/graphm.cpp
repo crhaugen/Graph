@@ -104,16 +104,16 @@ void GraphM::findShortestPath()
 				if (C[nearestNeighbor][i] != INT_MAX 
 					&& !T[nearestNeighbor][i].visted)
 				{
-					//distance is the smaller of current distance 
-					//and new distance
-					T[source][i].dist = min(T[source][i].dist, 
-						T[source][nearestNeighbor].dist + C[nearestNeighbor][i]);
-
-					//path to smallest is either current path or new neighbor.
+					//path to smallest is either current path or through new neighbor.
 					if (T[source][i].dist > T[source][nearestNeighbor].dist +
 						C[nearestNeighbor][i])
 					{
 						T[source][i].path = nearestNeighbor;
+						shortestPaths[i] += to_string(nearestNeighbor);
+						shortestPaths[i] += " ";
+
+						T[source][i].dist = 
+							T[source][nearestNeighbor].dist + C[nearestNeighbor][i];
 					}
 				}
 			}
@@ -140,7 +140,9 @@ void GraphM::displayAll() const
 
 				if (T[currentVertex][neighbor].dist != INT_MAX)
 				{
-					cout << T[currentVertex][neighbor].dist;
+					cout << T[currentVertex][neighbor].dist << " ";
+
+					cout << shortestPaths[neighbor];
 					//somehow get shortest path..
 				}
 				else
