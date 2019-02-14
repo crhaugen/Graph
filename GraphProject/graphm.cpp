@@ -178,7 +178,7 @@ void GraphM::displayAll() const
 
 				if (T[currentVertex][neighbor].dist != INT_MAX)
 				{
-					cout << T[currentVertex][neighbor].dist << " ";
+					cout << T[currentVertex][neighbor].dist << "   ";
 
 					cout << shortestPaths[currentVertex][neighbor];
 					//somehow get shortest path..
@@ -192,11 +192,32 @@ void GraphM::displayAll() const
 			
 		}
 	}
+	cout << setw(1);
 }
 
 void GraphM::display(int startNode, int endNode) const
 {
+	cout << startNode << setw(4) << endNode << setw(4);
 
+	if (T[startNode][endNode].dist != INT_MAX)
+	{
+		cout << T[startNode][endNode].dist << setw(10)
+			<< shortestPaths[startNode][endNode] << endl;
+
+		for (int i = 0; i < shortestPaths[startNode][endNode].length(); i++)
+		{
+			if (shortestPaths[startNode][endNode].at(i) != ' ')
+			{
+				cout << data[shortestPaths[startNode][endNode].at(i) - 48] << endl;
+			}
+		}
+ 	}
+	else
+	{
+		cout << "  ---" << endl;
+	}
+
+	cout << endl;
 }
 
 GraphM::~GraphM()
