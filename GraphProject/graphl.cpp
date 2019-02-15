@@ -14,6 +14,7 @@ void GraphL::insertEdgeNode(int startVertex, int endVertex)
 {
 	EdgeNode *edgeNode = new EdgeNode;
 	edgeNode->adjGraphNode = endVertex;
+	edgeNode->nextEdge = nullptr;
 
 	if (adjacencyList[startVertex].edgeHead != nullptr)
 	{
@@ -41,10 +42,8 @@ void GraphL::buildGraph(ifstream& infile)
 		adjacencyList[i].visited = false;
 	}
 	
-	
 	int startVertex = 0;
 	int endVertex = 0;
-
 
 	while (true)
 	{
@@ -60,13 +59,29 @@ void GraphL::buildGraph(ifstream& infile)
 			break;
 		}
 
-		insertEdgeNode(startVertex, startVertex);
+		insertEdgeNode(startVertex, endVertex);
 	}
 }
 
 void GraphL::displayGraph() const
 {
+	cout << "Graph:" << endl;
 
+	for (int currentVertex = 1; currentVertex <= size; currentVertex++)
+	{
+		cout << "Node " << currentVertex << setw(25) 
+			<< *adjacencyList[currentVertex].data << endl;
+
+		EdgeNode *temEdgeNode = adjacencyList[currentVertex].edgeHead;
+
+		while (temEdgeNode != nullptr)
+		{
+			cout << "  edge " << currentVertex << " " << temEdgeNode->adjGraphNode << endl;
+			temEdgeNode = temEdgeNode->nextEdge;
+		}
+
+		cout << endl;
+	}
 }
 
 void GraphL::depthFirstSearch() const
