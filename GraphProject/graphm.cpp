@@ -53,19 +53,8 @@ void GraphM::buildGraph(ifstream& infile)
 			break;
 		}
 
-		insertEdge(startVertex, endVertex, weight);
+		C[startVertex][endVertex] = weight;
 	}
-
-}
-
-void GraphM::insertEdge(int startVertex, int endVertex, int weight)
-{
-	C[startVertex][endVertex] = weight;
-}
-
-void GraphM::removeEdge(int startVertex, int endVertex)
-{
-	C[startVertex][endVertex] = INT_MAX;
 }
 
 int GraphM::findNearestNeighbor(int sourceNode) const
