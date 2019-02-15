@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "nodedata.h"
 
-const int MAXNODES = 100; //per assignment instructions
+const int MAXNODES = 101; //per assignment instructions
 
 class GraphM
 {
@@ -25,12 +25,11 @@ private:
 	string shortestPaths[MAXNODES][MAXNODES];
 	void getShortestPaths();
 
+
 public:
 	GraphM();
 	
 	void buildGraph(ifstream& infile);
-	void insertEdge(int startVertex, int endVertex, int weight);
-	void removeEdge(int startVertex, int endVertex);
 	void findShortestPath();
 	void displayAll() const;
 	void display(int fromNode, int toNode) const;
