@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
+#include "nodedata.h"
 
-const int MAXNODES = 101; //per assignment instructions
 
 struct EdgeNode; //forward reference for the compiler
 
@@ -21,13 +21,19 @@ struct EdgeNode
 class GraphL
 {
 private:
-	GraphNode *adjacencyList[MAXNODES];
+	GraphNode *adjacencyList; //assuming that highest node will always be input size.. 
+	int size;
+
+	void insertEdgeNode(int startVertex, int endVertex);
 
 public:
 	GraphL();
+	
+	void buildGraph(ifstream& infile);
 
+	void displayGraph() const;
 
-
+	void depthFirstSearch() const;
 
 
 	~GraphL();
