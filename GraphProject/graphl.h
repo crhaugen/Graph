@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "nodedata.h"
-
+#include <iomanip> 
 
 struct EdgeNode; //forward reference for the compiler
 
@@ -21,10 +21,12 @@ struct EdgeNode
 class GraphL
 {
 private:
-	GraphNode *adjacencyList; //assuming that highest node will always be input size.. 
+	GraphNode *adjacencyList; 
 	int size;
 
 	void insertEdgeNode(int startVertex, int endVertex);
+	void depthFirstSearch(int vertex) const;
+	void removeHelper(EdgeNode *temEdgeNode);
 
 public:
 	GraphL();
