@@ -8,6 +8,7 @@ using namespace std;
 GraphL::GraphL()
 {
 	size = 0;
+	adjacencyList = nullptr;
 }
 
 void GraphL::insertEdgeNode(int startVertex, int endVertex)
@@ -84,13 +85,59 @@ void GraphL::displayGraph() const
 	}
 }
 
-void GraphL::depthFirstSearch() const
+void GraphL::depthFirstSearch(int vertex) const
 {
+	adjacencyList[vertex].visited = true;
+	cout << vertex << " ";
 
+	EdgeNode *currentEdge = adjacencyList[vertex].edgeHead;
+	while (currentEdge != nullptr)
+	{
+		if (!adjacencyList[currentEdge->adjGraphNode].visited)
+		{
+			depthFirstSearch(currentEdge->adjGraphNode);
+		}
+
+		currentEdge = currentEdge->nextEdge;
+	}
 }
 
+void GraphL::depthFirstSearch() const
+{
+	cout << "Depth First Search: ";
+
+	for (int v = 1; v <= size; v++)
+	{
+		if (!adjacencyList[v].visited)
+		{
+			depthFirstSearch(v);
+		}
+	}
+
+	cout << endl << endl;
+}
+
+void GraphL::removeHelper(EdgeNode *temEdgeNode)
+{
+	if (temEdgeNode != nullptr)
+	{
+		removeHelper(temEdgeNode->nextEdge);
+	}
+	delete temEdgeNode;
+}
 
 GraphL::~GraphL()
 {
+	if (adjacencyList != nullptr)
+	{
+		for (int currentVertex = 1; currentVertex <= size; currentVertex++)
+		{
+			EdgeNode *temEdgeNode = adjacencyList[currentVertex].edgeHead;
+			
+			removeHelper(temEdgeNode);
+			delete adjacencyList[currentVertex].data;
+		}
+	}
 
+	delete[] adjacencyList;
 }
