@@ -57,6 +57,32 @@ void GraphM::buildGraph(ifstream& infile)
 	}
 }
 
+
+void GraphM::getShortestPath(int startNode, int endNode, int startIndex, int endIndex, int index) 
+{
+	if (T[startNode][endNode].path != 0)
+	{
+		getShortestPath(startNode, T[startNode][endNode].path, startIndex, endIndex, index++);
+	}
+
+	P[startIndex][endIndex].shortestPath[index] = endNode;
+}
+
+void GraphM::getShortestPaths() 
+{
+	for (int startNode = 1; startNode <= size; startNode++)
+	{
+		for (int endNode = 1; endNode <= size; endNode++)
+		{
+			if (startNode != endNode)
+			{
+				int index = 0;
+				getShortestPath(startNode, endNode, startNode, endNode, index);
+			}
+		}
+	}
+}
+
 int GraphM::findNearestNeighbor(int sourceNode) const
 {
 	int smallestDist = INT_MAX;
@@ -71,33 +97,6 @@ int GraphM::findNearestNeighbor(int sourceNode) const
 		}
 	}
 	return indexOfSmallest;
-}
-
-void GraphM::getShortestPaths()
-{
-	string path = "";
-	for (int from = 1; from <= size; from++)
-	{
-		for (int to = 1; to <= size; to++)
-		{
-			if (from != to)
-			{
-				int nextVertex = to;
-
-				while (nextVertex != 0)
-				{
-					path += to_string(nextVertex) + " ";
-					nextVertex = T[from][nextVertex].path;
-				}
-
-				reverse(path.begin(), path.end());
-				shortestPaths[from][to] = path;
-				path = "";
-			}
-
-			
-		}
-	}
 }
 
 void GraphM::findShortestPath()
@@ -148,6 +147,19 @@ void GraphM::setAllVistedFalse()
 	}
 }
 
+void GraphM::printOnePath(int startNode, int endNode) const
+{
+	for (int i = 1; i < MAXNODES; i++)
+	{
+		if (P[startNode][endNode].shortestPath[i] == 0)
+		{
+			break;
+		}
+
+		cout << P[startNode][endNode].shortestPath[i];
+	}
+}
+
 void GraphM::displayAll() const
 {
 	cout << "Description" << setw(60) 
@@ -169,8 +181,7 @@ void GraphM::displayAll() const
 				{
 					cout << T[currentVertex][neighbor].dist << "   ";
 
-					cout << shortestPaths[currentVertex][neighbor];
-					//somehow get shortest path..
+					printOnePath(currentVertex, neighbor);
 				}
 				else
 				{
@@ -190,15 +201,18 @@ void GraphM::display(int startNode, int endNode) const
 
 	if (T[startNode][endNode].dist != INT_MAX)
 	{
-		cout << T[startNode][endNode].dist << setw(10)
-			<< shortestPaths[startNode][endNode] << endl;
-
-		for (int i = 0; i < shortestPaths[startNode][endNode].length(); i++)
+		cout << T[startNode][endNode].dist << setw(10);
+		printOnePath(startNode, endNode);
+		cout << endl;
+		
+		for (int i = 1; i < MAXNODES; i++)
 		{
-			if (shortestPaths[startNode][endNode].at(i) != ' ')
+			if (P[startNode][endNode].shortestPath[i] == 0)
 			{
-				cout << data[shortestPaths[startNode][endNode].at(i) - 48] << endl;
+				break;
 			}
+
+			cout << data[i] << endl;
 		}
  	}
 	else
