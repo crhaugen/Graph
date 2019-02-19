@@ -1,5 +1,6 @@
-#include "stdafx.h"
 
+#include "stdafx.h"
+#include "limits.h"
 #include"graphm.h"
 #include <iomanip> 
 #include <iostream>
@@ -28,7 +29,15 @@ GraphM::GraphM()
 void GraphM::buildGraph(ifstream& infile)
 {
 	infile >> size;
-	infile.get();
+
+	if (size < 1)
+	{
+		return;
+	}
+
+	string names = "";
+
+	getline(infile, names);
 
 	for (int i = 1; i <= size; i++)
 	{
@@ -54,34 +63,21 @@ void GraphM::buildGraph(ifstream& infile)
 		}
 
 		C[startVertex][endVertex] = weight;
+
 	}
 }
 
 
-void GraphM::getShortestPath(int startNode, int endNode, int startIndex, int endIndex, int index) 
+void GraphM::printShortestPath(int startNode, int endNode) const
 {
 	if (T[startNode][endNode].path != 0)
 	{
-		getShortestPath(startNode, T[startNode][endNode].path, startIndex, endIndex, index++);
+		printShortestPath(startNode, T[startNode][endNode].path);
 	}
 
-	P[startIndex][endIndex].shortestPath[index] = endNode;
+	cout << " " << endNode;
 }
 
-void GraphM::getShortestPaths() 
-{
-	for (int startNode = 1; startNode <= size; startNode++)
-	{
-		for (int endNode = 1; endNode <= size; endNode++)
-		{
-			if (startNode != endNode)
-			{
-				int index = 0;
-				getShortestPath(startNode, endNode, startNode, endNode, index);
-			}
-		}
-	}
-}
 
 int GraphM::findNearestNeighbor(int sourceNode) const
 {
@@ -90,7 +86,7 @@ int GraphM::findNearestNeighbor(int sourceNode) const
 
 	for (int i = 1; i <= size; i++)
 	{
-		if (T[sourceNode][i].dist < smallestDist && !T[sourceNode][i].visted)
+		if ((T[sourceNode][i].dist < smallestDist) && !T[sourceNode][i].visted)
 		{
 			smallestDist = T[sourceNode][i].dist;
 			indexOfSmallest = i;
@@ -109,23 +105,20 @@ void GraphM::findShortestPath()
 		{
 			//find nearest neighbor that has not been visted
 			int nearestNeighbor = findNearestNeighbor(source);
-			
+
 			//mark it as visted
 			T[source][nearestNeighbor].visted = true;
 
+
 			for (int i = 1; i <= size; i++)
 			{
-				//if there is a path and that path has not been visted check it
-				if (C[nearestNeighbor][i] != INT_MAX 
-					&& !T[nearestNeighbor][i].visted)
+
+				if ((!T[source][i].visted) && (C[nearestNeighbor][i] != INT_MAX))
 				{
-					//path to smallest is either current path or through new neighbor.
-					if (T[source][i].dist > T[source][nearestNeighbor].dist +
-						C[nearestNeighbor][i])
+
+					if ((T[source][i].dist > (T[source][nearestNeighbor].dist + C[nearestNeighbor][i])))
 					{
-						T[source][i].dist = 
-							T[source][nearestNeighbor].dist + C[nearestNeighbor][i];
-						
+						T[source][i].dist = T[source][nearestNeighbor].dist + C[nearestNeighbor][i];
 						T[source][i].path = nearestNeighbor;
 					}
 				}
@@ -133,7 +126,6 @@ void GraphM::findShortestPath()
 		}
 		setAllVistedFalse();
 	}
-	getShortestPaths();
 }
 
 void GraphM::setAllVistedFalse()
@@ -147,22 +139,20 @@ void GraphM::setAllVistedFalse()
 	}
 }
 
-void GraphM::printOnePath(int startNode, int endNode) const
+void GraphM::printDataOnePath(int startNode, int endNode) const
 {
-	for (int i = 1; i < MAXNODES; i++)
-	{
-		if (P[startNode][endNode].shortestPath[i] == 0)
-		{
-			break;
-		}
 
-		cout << P[startNode][endNode].shortestPath[i];
+	if (T[startNode][endNode].path != 0)
+	{
+		printDataOnePath(startNode, T[startNode][endNode].path);
 	}
+
+	cout << data[endNode] << endl;
 }
 
 void GraphM::displayAll() const
 {
-	cout << "Description" << setw(60) 
+	cout << "Description" << setw(60)
 		<< "From node  To node  Dijkstra's Path " << endl;
 
 	for (int currentVertex = 1; currentVertex <= size; currentVertex++)
@@ -177,11 +167,14 @@ void GraphM::displayAll() const
 			{
 				cout << currentVertex << setw(10) << neighbor << setw(10);
 
-				if (T[currentVertex][neighbor].dist != INT_MAX)
+				if (T[currentVertex][neighbor].dist != INT_MAX && T[currentVertex][neighbor].dist > 0)
 				{
 					cout << T[currentVertex][neighbor].dist << "   ";
 
-					printOnePath(currentVertex, neighbor);
+					if (currentVertex != neighbor)
+					{
+						printShortestPath(currentVertex, neighbor);
+					}
 				}
 				else
 				{
@@ -189,7 +182,7 @@ void GraphM::displayAll() const
 				}
 				cout << endl;
 			}
-			
+
 		}
 	}
 	cout << setw(1);
@@ -197,24 +190,21 @@ void GraphM::displayAll() const
 
 void GraphM::display(int startNode, int endNode) const
 {
+	if (startNode == endNode)
+	{
+		return;
+	}
+
 	cout << startNode << setw(4) << endNode << setw(4);
 
-	if (T[startNode][endNode].dist != INT_MAX)
+	if ((T[startNode][endNode].dist != INT_MAX) && T[startNode][endNode].dist > 0)
 	{
 		cout << T[startNode][endNode].dist << setw(10);
-		printOnePath(startNode, endNode);
+		printShortestPath(startNode, endNode);
 		cout << endl;
-		
-		for (int i = 1; i < MAXNODES; i++)
-		{
-			if (P[startNode][endNode].shortestPath[i] == 0)
-			{
-				break;
-			}
 
-			cout << data[i] << endl;
-		}
- 	}
+		printDataOnePath(startNode, endNode);
+	}
 	else
 	{
 		cout << "  ---" << endl;

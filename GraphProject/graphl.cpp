@@ -31,9 +31,16 @@ void GraphL::insertEdgeNode(int startVertex, int endVertex)
 void GraphL::buildGraph(ifstream& infile)
 {
 	infile >> size;
-	infile.get();
+	
+	if (size < 1)
+	{
+		return;
+	}
 
 	adjacencyList = new GraphNode[size + 1];
+
+	string names = "";
+	getline(infile, names);
 
 	for (int i = 1; i <= size; i++)
 	{
@@ -81,7 +88,7 @@ void GraphL::displayGraph() const
 			temEdgeNode = temEdgeNode->nextEdge;
 		}
 
-		cout << endl;
+		cout << endl << endl;
 	}
 }
 

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "nodedata.h"
 
 //------------------- constructors/destructor  -------------------------------

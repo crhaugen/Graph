@@ -7,6 +7,8 @@
 #include <fstream>
 using namespace std;
 
+#include "stdafx.h"
+
 // simple class containing one string to use for testing
 // not necessary to comment further
 
