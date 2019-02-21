@@ -97,6 +97,7 @@ int GraphM::findNearestNeighbor(int sourceNode) const
 
 void GraphM::findShortestPath()
 {
+	int nearestNeighbor = 0;
 	for (int source = 1; source <= size; source++)
 	{
 		T[source][source].dist = 0;
@@ -104,7 +105,7 @@ void GraphM::findShortestPath()
 		for (int neighbor = 1; neighbor <= size; neighbor++)
 		{
 			//find nearest neighbor that has not been visted
-			int nearestNeighbor = findNearestNeighbor(source);
+			 nearestNeighbor = findNearestNeighbor(source);
 
 			//mark it as visted
 			T[source][nearestNeighbor].visted = true;
