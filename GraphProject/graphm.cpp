@@ -1,5 +1,5 @@
 // ------------------------------------- graphm.cpp -------------------------- 
-// Chyanne Haugen (crhaugen@uw.edu) CSS 343 A
+// Chyanne Haugen (crhaugen@uw.edu) CSS 343 A (assignment #3)
 // Creation Date: 2/5/19 
 // Date of Last Modification: 2/19/19
 // ----------------------------------------------------------------------------
