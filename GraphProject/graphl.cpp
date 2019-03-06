@@ -70,6 +70,7 @@ void GraphL::insertEdgeNode(int startVertex, int endVertex)
 //	Assumptions: if size is zero in the file just return
 void GraphL::buildGraph(ifstream& infile)
 {
+	//getting input from file
 	infile >> size;
 
 	if (size < 1)
